@@ -83,9 +83,9 @@ function StoriesSection() {
     setLoading(true);
     setStory(null);
     try {
-      const r = await fetch("https://api.anthropic.com/v1/messages", {
+      const r = await fetch("/api/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 800, system: STORY_PROMPT, messages: [{ role: "user", content: `Genera una historia ${t.prompt}` }] }),
+        body: JSON.stringify({  max_tokens: 800, system: STORY_PROMPT, messages: [{ role: "user", content: `Genera una historia ${t.prompt}` }] }),
       });
       const d = await r.json();
       const text = d.content?.[0]?.text || "";
@@ -633,9 +633,9 @@ function ConvoSection() {
     setStatus("小美 pensando...");
     try {
       const apiMsgs = newMsgs.filter(m => !m.hidden).map(m => ({ role: m.role, content: m.content }));
-      const r = await fetch("https://api.anthropic.com/v1/messages", {
+      const r = await fetch("/api/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 500, system: CONVO_PROMPT, messages: apiMsgs }),
+        body: JSON.stringify({  max_tokens: 500, system: CONVO_PROMPT, messages: apiMsgs }),
       });
       const d = await r.json();
       const text = d.content?.map(i => i.text || "").join("\n") || "";
@@ -664,9 +664,9 @@ function ConvoSection() {
     setStatus("Conectando con 小美...");
     const prompt = topic || "Preséntate y pregúntale algo casual.";
     try {
-      const r = await fetch("https://api.anthropic.com/v1/messages", {
+      const r = await fetch("/api/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 500, system: CONVO_PROMPT, messages: [{ role: "user", content: prompt }] }),
+        body: JSON.stringify({  max_tokens: 500, system: CONVO_PROMPT, messages: [{ role: "user", content: prompt }] }),
       });
       const d = await r.json();
       const text = d.content?.map(i => i.text || "").join("\n") || "";
@@ -948,11 +948,11 @@ function ChatSection() {
     setMsgs(p => [...p, { role: "user", content: u }]);
     setLd(true);
     try {
-      const r = await fetch("https://api.anthropic.com/v1/messages", {
+      const r = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          
           max_tokens: 1000,
           system: TUTOR_PROMPT,
           messages: [...msgs, { role: "user", content: u }].map(m => ({ role: m.role, content: m.content })),
